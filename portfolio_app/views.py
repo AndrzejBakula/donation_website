@@ -7,9 +7,11 @@ from portfolio_app.models import Donation, Institution
 class LandingPageView(View):
     def get(self, request):
         bags = Donation.objects.all().aggregate(Sum("quantity"))
-        insts_count = Institution.objects.all().count()
+        institutions = Institution.objects.all().order_by("name")
+        insts_count = institutions.count()
         ctx = {
             "bags": bags,
+            "institutions": institutions,
             "insts_count": insts_count
         }
         return render(request, "index.html", ctx)
