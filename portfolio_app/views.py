@@ -25,6 +25,9 @@ class LoginView(View):
 class RegisterView(View):
     def get(self, request):
         return render(request, "register.html")
+    
+    def post(self, request):
+        pass
 
 
 class AddDonationView(View):
