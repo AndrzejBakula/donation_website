@@ -26,8 +26,7 @@ class LoginView(View):
     def post(self, request):
         username = request.POST["email"]
         password = request.POST["password"]
-        # user = authenticate(username=username, password=password)
-        user = User.objects.get(username=username)
+        user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
             request.session["logged"] = True
@@ -73,7 +72,9 @@ class RegisterView(View):
             }
             return render(request, "register.html", ctx)
         else:
-            user = User.objects.create(password=password, username=email, first_name=name, last_name=surname)
+            user = User.objects.create(username=email, first_name=name, last_name=surname)
+            user.set_password(password)
+            user.save()
             message = f"Dodano nowego użytkownika {user.first_name} {user.last_name}. Proszę się zalogować."
             ctx = {
                 "message": message
