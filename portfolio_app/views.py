@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Sum
+from django.contrib.auth.models import User
 from django.views import View
 from portfolio_app.models import Donation, Institution
 
@@ -27,7 +28,37 @@ class RegisterView(View):
         return render(request, "register.html")
     
     def post(self, request):
-        pass
+        name = request.POST["name"]
+        surname = request.POST["surname"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        password2 = request.POST["password2"]
+        message = ""
+        if password != password2:
+            message = "Proszę podać dwa takie same hasła"
+            ctx = {
+                "name": name,
+                "surname": surname,
+                "email": email,
+                "message": message
+            }
+            return render(request, "register.html", ctx)
+        elif name in ("", None) or surname in ("", None) or email in ("", None) or password in ("", None):
+            message = "Proszę wypełnić wszystkie pola"
+            ctx = {
+                "name": name,
+                "surname": surname,
+                "email": email,
+                "message": message
+            }
+            return render(request, "register.html", ctx)
+        else:
+            user = User.objects.create(password=password, username=email, first_name=name, last_name=surname)
+            message = f"Dodano nowego użytkownika {user.first_name} {user.last_name}. Proszę się zalogować."
+            ctx = {
+                "message": message
+            }
+            return render(request, "login.html", ctx)
 
 
 class AddDonationView(View):
