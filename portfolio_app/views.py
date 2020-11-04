@@ -84,4 +84,8 @@ class RegisterView(View):
 
 class AddDonationView(View):
     def get(self, request):
-        return render(request, "form.html")
+        if_user = request.user
+        is_user_logged = if_user.is_authenticated
+        if is_user_logged == True:
+            return render(request, "form.html")
+        return redirect("/login")
