@@ -3,29 +3,6 @@
 
 {% block content %}
 
-<header class="header--form-page">
-  <nav class="container container--70">
-    <ul class="nav--actions">
-      <li class="logged-user">
-        Witaj Agata
-        <ul class="dropdown">
-          <li><a href="#">Profil</a></li>
-          <li><a href="#">Ustawienia</a></li>
-          <li><a href="#">Wyloguj</a></li>
-        </ul>
-      </li>
-    </ul>
-
-    <ul>
-      <li><a href="{% url 'index' %}" class="btn btn--without-border active">Start</a></li>
-      <li><a href="{% url 'index' %}#steps" class="btn btn--without-border">O co chodzi?</a></li>
-      <li><a href="{% url 'index' %}#about-us" class="btn btn--without-border">O nas</a></li>
-      <li><a href="{% url 'index' %}#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
-      <li><a href="{% url 'add-donation' %}" class="btn btn--without-border">Przekaż dary</a></li>
-      <li><a href="{% url 'index' %}#contact" class="btn btn--without-border">Kontakt</a></li>
-    </ul>
-  </nav>
-
   <div class="slogan container container--90">
     <div class="slogan--item">
       <h1>

@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Sum
+from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views import View
 from portfolio_app.models import Donation, Institution
@@ -21,6 +22,25 @@ class LandingPageView(View):
 class LoginView(View):
     def get(self, request):
         return render(request, "login.html")
+    
+    def post(self, request):
+        username = request.POST["email"]
+        password = request.POST["password"]
+        # user = authenticate(username=username, password=password)
+        user = User.objects.get(username=username)
+        if user is not None:
+            login(request, user)
+            request.session["logged"] = True
+            return redirect("/")
+        return redirect("/register")
+        
+
+class LogoutView(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            logout(request)
+            request.session["logged"] = False
+        return redirect("/")
 
 
 class RegisterView(View):
