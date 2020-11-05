@@ -90,3 +90,23 @@ class AddDonationView(View):
             categories = Category.objects.all().order_by("name")
             return render(request, "step1.html", {"categories": categories})
         return redirect("/login")
+    
+    def post(self, request):
+        checked = request.POST["categories"]
+        if len(checked) != 0:
+            categories = []
+            for i in checked:
+                categories.append(Category.objects.get(id=int(i)))
+            return render(request, "step2.html", {"categories": categories})
+        return redirect("/add-donation")
+
+
+class Step1View(View):
+    def get(self, request):
+        categories = Category.objects.all().order_by("name")
+        return render(request, "step1.html", {"categories": categories})
+
+
+class Step2View(View):
+    def post(self, request, categories):
+        pass

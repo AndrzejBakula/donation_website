@@ -2,38 +2,40 @@
 {% load static %}
 
 
-{% block step_number %}
+{% block steps %}
 
     <div id="form" class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/5</div>
 
-{% endblock %}
+            <form action="{% url 'add-donation' %}#form" method="post">
+                {% csrf_token %}
+                <!-- STEP 1: class .active is switching steps -->
+                <div data-step="1" class="active">
+                    <h3>Zaznacz co chcesz oddać:</h3>
 
-{% block steps %}
+                    {% for category in categories %}
+                    <div class="form-group form-group--checkbox">
+                        <label>
+                        <input
+                            type="checkbox"
+                            name="categories"
+                            value="{{ category.id }}"
+                        />
+                        <span class="checkbox"></span>
+                        <span class="description"
+                            >{{ category.name }}</span
+                        >
+                        </label>
+                    </div>
+                    {% endfor %}
 
-    <!-- STEP 1: class .active is switching steps -->
-    <div data-step="1" class="active">
-        <h3>Zaznacz co chcesz oddać:</h3>
-
-        {% for category in categories %}
-        <div class="form-group form-group--checkbox">
-            <label>
-            <input
-                type="checkbox"
-                name="categories"
-                value="{{ category.name }}"
-            />
-            <span class="checkbox"></span>
-            <span class="description"
-                >{{ category.name }}</span
-            >
-            </label>
+                    <div class="form-group form-group--buttons">
+                        <button type="submit" class="btn">Potwierdzam</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        {% endfor %}
+</section>
 
-        <div class="form-group form-group--buttons">
-            <button type="button" class="btn next-step">Dalej</button>
-        </div>
-    </div>
 
 {% endblock %}
