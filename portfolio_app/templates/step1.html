@@ -7,7 +7,7 @@
     <div id="form" class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/5</div>
 
-            <form action="{% url 'add-donation' %}#form" method="post">
+            <form action="{% url 'step1' %}#form" method="post">
                 {% csrf_token %}
                 <!-- STEP 1: class .active is switching steps -->
                 <div data-step="1" class="active">

@@ -82,7 +82,7 @@ class RegisterView(View):
             return render(request, "login.html", ctx)
 
 
-class AddDonationView(View):
+class Step1View(View):
     def get(self, request):
         if_user = request.user
         is_user_logged = if_user.is_authenticated
@@ -92,21 +92,39 @@ class AddDonationView(View):
         return redirect("/login")
     
     def post(self, request):
-        checked = request.POST["categories"]
+        checked = request.POST.getlist("categories")
         if len(checked) != 0:
             categories = []
             for i in checked:
                 categories.append(Category.objects.get(id=int(i)))
             return render(request, "step2.html", {"categories": categories})
-        return redirect("/add-donation")
-
-
-class Step1View(View):
-    def get(self, request):
-        categories = Category.objects.all().order_by("name")
-        return render(request, "step1.html", {"categories": categories})
+        return redirect("/step1")
 
 
 class Step2View(View):
-    def post(self, request, categories):
-        pass
+    def get(self,request):
+        return render(request, "step2.html")
+
+    def post(self, request):
+        checked = request.POST.getlist("categories")
+        if len(checked) != 0:
+            categories = []
+            for i in checked:
+                categories.append(Category.objects.get(id=int(i)))
+            return render(request, "step3.html", {"categories": categories})
+        return redirect("/step2")
+
+
+class Step3View(View):
+    def get(self, request):
+        return render(request, "step3.html")
+
+
+class Step4View(View):
+    def get(self, request):
+        return render(request, "step4.html")
+
+
+class Step5View(View):
+    def get(self, request):
+        return render(request, "step5.html")
