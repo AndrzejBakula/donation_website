@@ -88,5 +88,5 @@ class AddDonationView(View):
         is_user_logged = if_user.is_authenticated
         if is_user_logged == True:
             categories = Category.objects.all().order_by("name")
-            return render(request, "form.html", {"categories": categories})
+            return render(request, "step1.html", {"categories": categories})
         return redirect("/login")
