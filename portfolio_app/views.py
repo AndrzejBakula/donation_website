@@ -81,57 +81,11 @@ class RegisterView(View):
             }
             return render(request, "login.html", ctx)
 
-CATEGORIES = []
-BAGS = 0
-ORGANIZATION = None
 
 class Step1View(View):
     def get(self, request):
         if_user = request.user
         is_user_logged = if_user.is_authenticated
         if is_user_logged == True:
-<<<<<<< HEAD
-            cats = Category.objects.all().order_by("name")
-            return render(request, "step1.html", {"cats": cats})
-        return redirect("/login")
-    
-    def post(self, request):
-        checked = request.POST.getlist("categories")
-        if len(checked) != 0:
-            categories = []
-            for i in checked:
-                categories.append(Category.objects.get(id=int(i)))
-            CATEGORIES = categories
-            cats = Category.objects.all().order_by("name")
-            return render(request, "step1.html", {"accepted": "accepted", "cats": cats})
-        return redirect("/step1")
-
-
-class Step2View(View):
-    def get(self, request):
-        orgs = Institution.objects.all().order_by("name")
-        return render(request, "step3.html", {"orgs": orgs})
-    
-    def post(self, request):
-        bags = request.POST.get("bags")
-        if bags != 0:
-            BAGS = int(bags)
-            return render(request, "step3.html")
-        return redirect("/step2")
-
-
-class Step3View(View):
-    def get(self, request):
-        orgs = Institution.objects.all().order_by("name")
-        return render(request, "step3.html", {"orgs": orgs})
-    
-    def post(self, request):
-        organization = request.POST.get("organization")
-        if organization != None:
-            ORGANIZATION = organization
-            return render(request, "step4.html")
-        return redirect("/step3")
-=======
             return render(request, "form.html")
         return redirect("/login")
->>>>>>> parent of 8576ff1... step1 done
