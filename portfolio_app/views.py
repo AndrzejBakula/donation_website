@@ -82,11 +82,16 @@ class RegisterView(View):
             return render(request, "login.html", ctx)
 
 
-class Step1View(View):
+class FormView(View):
     def get(self, request):
         if_user = request.user
         is_user_logged = if_user.is_authenticated
         if is_user_logged == True:
             categories = Category.objects.all().order_by("name")
-            return render(request, "form.html", {"categories": categories})
+            institutions = Institution.objects.all().order_by("name")
+            ctx = {
+                "categories": categories,
+                "institutions": institutions
+            }
+            return render(request, "form.html", ctx)
         return redirect("/login")
