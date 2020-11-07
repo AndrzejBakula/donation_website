@@ -87,5 +87,49 @@ class Step1View(View):
         if_user = request.user
         is_user_logged = if_user.is_authenticated
         if is_user_logged == True:
+<<<<<<< HEAD
             return render(request, "form.html")
         return redirect("/login")
+=======
+            categories = Category.objects.all().order_by("name")
+            return render(request, "step1.html", {"categories": categories})
+        return redirect("/login")
+    
+    def post(self, request):
+        checked = request.POST.getlist("categories")
+        if len(checked) != 0:
+            categories = []
+            for i in checked:
+                categories.append(Category.objects.get(id=int(i)))
+            return render(request, "step2.html", {"categories": categories})
+        return redirect("/step1")
+
+
+class Step2View(View):
+    def get(self,request):
+        return render(request, "step2.html")
+
+    def post(self, request):
+        checked = request.POST.getlist("categories")
+        if len(checked) != 0:
+            categories = []
+            for i in checked:
+                categories.append(Category.objects.get(id=int(i)))
+            return render(request, "step3.html", {"categories": categories})
+        return redirect("/step2")
+
+
+class Step3View(View):
+    def get(self, request):
+        return render(request, "step3.html")
+
+
+class Step4View(View):
+    def get(self, request):
+        return render(request, "step4.html")
+
+
+class Step5View(View):
+    def get(self, request):
+        return render(request, "step5.html")
+>>>>>>> parent of 5cbae01... WRONG TURN!

@@ -7,14 +7,13 @@
     <div id="form" class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/5</div>
 
-            <form action="{% url 'step1' %}" method="post">
+            <form action="{% url 'step1' %}#form" method="post">
                 {% csrf_token %}
                 <!-- STEP 1: class .active is switching steps -->
-                {% if not accepted %}
-                <div class="active">
+                <div data-step="1" class="active">
                     <h3>Zaznacz co chcesz oddać:</h3>
 
-                    {% for category in cats %}
+                    {% for category in categories %}
                     <div class="form-group form-group--checkbox">
                         <label>
                         <input
@@ -33,16 +32,9 @@
                     <div class="form-group form-group--buttons">
                         <button type="submit" class="btn">Potwierdzam</button>
                     </div>
-                {% endif %}
-                {% if accepted %}
-                    <div class="form-group form-group--buttons">
-                        <button type="button" class="btn next-step"><a href="{% url 'step2' %}#form">Dalej</a></button>
-                    </div>
-                {% endif %}
                 </div>
             </form>
         </div>
-    </div>
 </section>
 
 
