@@ -3,7 +3,7 @@ from django.db.models import Sum
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views import View
-from portfolio_app.models import Donation, Institution, Category
+from portfolio_app.models import Donation, Institution
 
 
 class LandingPageView(View):
@@ -90,6 +90,7 @@ class Step1View(View):
         if_user = request.user
         is_user_logged = if_user.is_authenticated
         if is_user_logged == True:
+<<<<<<< HEAD
             cats = Category.objects.all().order_by("name")
             return render(request, "step1.html", {"cats": cats})
         return redirect("/login")
@@ -130,3 +131,7 @@ class Step3View(View):
             ORGANIZATION = organization
             return render(request, "step4.html")
         return redirect("/step3")
+=======
+            return render(request, "form.html")
+        return redirect("/login")
+>>>>>>> parent of 8576ff1... step1 done
