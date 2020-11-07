@@ -7,7 +7,7 @@
         <div id="form" class="form--steps-container">
             <div class="form--steps-counter">Krok <span>2</span>/5</div>
 
-                <form action="{% url 'step2' %}#form" method="post">
+                <form action="{% url 'step2' %}" method="post">
                     {% csrf_token %}
                     <!-- STEP 2 -->
                     <div data-step="2" class="active">
@@ -22,7 +22,7 @@
 
                         <div class="form-group form-group--buttons">
                             <button type="button" class="btn prev-step"><a href="{% url 'step1' %}#form">Wstecz</a></button>
-                            <button type="button" class="btn next-step">Dalej</button>
+                            <button type="submit" class="btn next-step">Dalej</button>
                         </div>
                     </div>
                 </form>
