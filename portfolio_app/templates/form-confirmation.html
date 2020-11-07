@@ -12,10 +12,12 @@
 {% block slogan %}
 
   <div class="slogan container container--90">
+    <div class="slogan--item">
     <h2>
       Dziękujemy za przesłanie formularza Na maila prześlemy wszelkie
       informacje o odbiorze.
     </h2>
+  </div>
   </div>
 
 {% endblock %}
@@ -23,6 +25,6 @@
 
 {% block content %}
 
-<script src="js/app.js"></script>
+<script src="{% static 'js/app.js' %}"></script>
 
 {% endblock %}

@@ -95,3 +95,15 @@ class FormView(View):
             }
             return render(request, "form.html", ctx)
         return redirect("/login")
+
+
+class FormConfirmationView(View):
+    def get(self, request):
+        return render(request, "form-confirmation.html")
+    
+    def post(self, request):
+
+        ctx = {
+
+        }
+        return render(request, "form-confirmation.html", ctx)

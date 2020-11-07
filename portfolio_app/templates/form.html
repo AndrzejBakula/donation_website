@@ -65,7 +65,7 @@
   <div class="form--steps-container">
     <div class="form--steps-counter">Krok <span>1</span>/5</div>
 
-    <form action="form-confirmation.html" method="post">
+    <form action="{% url 'form-confirmation' %}" method="post">
       <!-- STEP 1: class .active is switching steps -->
       <div data-step="1" class="active">
         <h3>Zaznacz co chcesz oddać:</h3>
@@ -235,7 +235,7 @@
 
         <div class="form-group form-group--buttons">
           <button type="button" class="btn prev-step">Wstecz</button>
-          <button type="submit" class="btn">Potwierdzam</button>
+          <button type="submit" class="btn"><a href="{% url 'form-confirmation' %}">Potwierdzam</a></button>
         </div>
       </div>
     </form>
