@@ -1,4 +1,16 @@
 document.addEventListener("DOMContentLoaded", function() {
+
+
+  var checkboxes = document.querySelectorAll(".form-group form-group--checkbox");
+  for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].addEventListener("click", function(event) {
+      var hidden = this.firstElementChild.lastElementChild;
+      hidden.innerText = "choosen";
+      console.log(hidden.innerText);
+      event.preventDefault();
+    });
+  }
+
   /**
    * HomePage - Help section
    */
@@ -16,6 +28,59 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     events() {
+
+      this.$next.forEach(btn => {
+        btn.addEventListener("click", e => {
+          e.preventDefault();
+          this.currentStep++;
+          console.log(this.currentStep)
+          if (this.currentStep === 2) {
+            this.$categories = $("input:checked")
+            var categories = [];
+            this.$categories.each(function () {
+              categories.push(this.dataset.category)
+            });
+            var address = "/rest/get_institutions/";
+            var params = {};
+            params.categories = categories ;
+            $.getJSON(address, $.param(params, true), function (data, status) {
+              console.log(data);
+              $.each(data, function (key, val) {
+                var $div =$("<div>", {"class": "form-group form-group--checkbox"});
+                var $label = $("<label>");
+                $div.append($label);
+                var $input = $("<input>", {"type":"radio", "name":"organization", "value":"old"});
+                // input.type = "radio";
+                // input.name = "organization";
+                // input.value = "old";
+                $label.append($input);
+                $label.append($("<span>", {"class":"checkbox radio"}));
+                var $span =$("<span>", {"class":"description"});
+                $label.append($span);
+                $span.append($("<div>", {"class":"title"}).html(val.name));
+                $span.append($("<div>", {"class":"subtitle"}).html(val.description));
+                $span.append($(document.createElement("div")));
+                $("#step_3").append($div);
+                // $label.append($span)
+              });
+            });
+          }
+          this.updateForm();
+        });
+      });
+      
+      // Previous step
+      this.$prev.forEach(btn => {
+        btn.addEventListener("click", e => {
+          e.preventDefault();
+          this.currentStep--;
+          this.updateForm();
+        });
+      });
+      // Form submit
+      this.$form.querySelector("form").addEventListener("submit", e => this.submit(e));
+    
+
       /**
        * Slide buttons
        */
@@ -253,6 +318,5 @@ document.addEventListener("DOMContentLoaded", function() {
     new FormSteps(form);
   }
 
-  
 
 });

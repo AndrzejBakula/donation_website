@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from portfolio_app.views import LandingPageView, LoginView, LogoutView, RegisterView
-from portfolio_app.views import FormView, FormConfirmationView
+from portfolio_app.views import FormView, FormConfirmationView, get_institutions_by_categories
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,5 +25,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(), name="register"),
     path('form/', FormView.as_view(), name="form"),
-    path('form_confirmation/', FormConfirmationView.as_view(), name="form-confirmation")
+    path('form_confirmation/', FormConfirmationView.as_view(), name="form-confirmation"),
+    path('rest/get_institutions/',  get_institutions_by_categories),
 ]

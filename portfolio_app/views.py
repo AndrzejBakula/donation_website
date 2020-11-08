@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.db.models import Sum
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import User
@@ -91,10 +92,21 @@ class FormView(View):
             institutions = Institution.objects.all().order_by("name")
             ctx = {
                 "categories": categories,
-                "institutions": institutions
             }
             return render(request, "form.html", ctx)
         return redirect("/login")
+
+
+def get_institutions_by_categories(request):
+    categories = request.GET.get("categories")
+    print(categories)
+    if categories is None:
+        institutions = models.Institution.objects.all().values()
+    else:
+        institutions = models.Institution.objects.filter(categories__in=categories).distinct().values()
+    
+    institutions_list = list(institutions)
+    return JsonResponse(institutions_list, safe=False)
 
 
 class FormConfirmationView(View):
