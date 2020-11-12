@@ -101,9 +101,9 @@ def get_institutions_by_categories(request):
     categories = request.GET.get("categories")
     print(categories)
     if categories is None:
-        institutions = models.Institution.objects.all().values()
+        institutions = Institution.objects.all().values()
     else:
-        institutions = models.Institution.objects.filter(categories__in=categories).distinct().values()
+        institutions = Institution.objects.filter(categories__in=categories).distinct().values()
     
     institutions_list = list(institutions)
     return JsonResponse(institutions_list, safe=False)

@@ -28,59 +28,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     events() {
-
-      this.$next.forEach(btn => {
-        btn.addEventListener("click", e => {
-          e.preventDefault();
-          this.currentStep++;
-          console.log(this.currentStep)
-          if (this.currentStep === 2) {
-            this.$categories = $("input:checked")
-            var categories = [];
-            this.$categories.each(function () {
-              categories.push(this.dataset.category)
-            });
-            var address = "/rest/get_institutions/";
-            var params = {};
-            params.categories = categories ;
-            $.getJSON(address, $.param(params, true), function (data, status) {
-              console.log(data);
-              $.each(data, function (key, val) {
-                var $div =$("<div>", {"class": "form-group form-group--checkbox"});
-                var $label = $("<label>");
-                $div.append($label);
-                var $input = $("<input>", {"type":"radio", "name":"organization", "value":"old"});
-                // input.type = "radio";
-                // input.name = "organization";
-                // input.value = "old";
-                $label.append($input);
-                $label.append($("<span>", {"class":"checkbox radio"}));
-                var $span =$("<span>", {"class":"description"});
-                $label.append($span);
-                $span.append($("<div>", {"class":"title"}).html(val.name));
-                $span.append($("<div>", {"class":"subtitle"}).html(val.description));
-                $span.append($(document.createElement("div")));
-                $("#step_3").append($div);
-                // $label.append($span)
-              });
-            });
-          }
-          this.updateForm();
-        });
-      });
-      
-      // Previous step
-      this.$prev.forEach(btn => {
-        btn.addEventListener("click", e => {
-          e.preventDefault();
-          this.currentStep--;
-          this.updateForm();
-        });
-      });
-      // Form submit
-      this.$form.querySelector("form").addEventListener("submit", e => this.submit(e));
-    
-
       /**
        * Slide buttons
        */
@@ -285,20 +232,87 @@ document.addEventListener("DOMContentLoaded", function() {
      */
     updateForm() {
       this.$step.innerText = this.currentStep;
-
+      //let address;
       // TODO: Validation
-
       this.slides.forEach(slide => {
         slide.classList.remove("active");
-
         if (slide.dataset.step == this.currentStep) {
           slide.classList.add("active");
         }
       });
-
+      // after step 1 get all institutions based on selected ategories
+      if (this.currentStep === 2) {
+        let temp = new Array();
+        $("input:checked").each(function () {
+          temp.push(this.dataset.category)
+        });
+        this.categories = temp;
+      }
+      if (this.currentStep === 3) {
+        $("#step_3").empty();
+        let address = "/rest/get_institutions/";
+        let params = {};
+        params.categories = this.categories;
+        $.getJSON(address, $.param(params, true), function (data, status) {
+          $.each(data, function (key, val) {
+            let $div = $("<div>", { "class": "form-group form-group--checkbox" });
+            let $label = $("<label>");
+            $div.append($label);
+            let $input = $("<input>", { "type": "radio", "name": "organization", "value": val.name });
+            $label.append($input);
+            $label.append($("<span>", { "class": "checkbox radio" }));
+            let $span = $("<span>", { "class": "description" });
+            $label.append($span);
+            $span.append($("<div>", { "class": "title" }).html(val.name));
+            $span.append($("<div>", { "class": "subtitle" }).html(val.description));
+            $span.append($(document.createElement("div")));
+            $("#step_3").append($div);
+          });
+        });
+      }
+      if (this.currentStep === 5) {
+        this.address = this.getInputValue('address');
+        this.city = this.getInputValue('city');
+        this.postcode = this.getInputValue('postcode');
+        this.phone = this.getInputValue('phone');
+        this.date = this.getInputValue('date');
+        this.time = this.getInputValue('time');
+        this.more_info = this.getInputValue('more_info');
+        this.bags = this.getInputValue('bags');
+        this.fundation = $('input[name=organization]:checked', this.$form).val()
+        let categories = "";
+        $("input.categories:checked").each(function () {
+          categories = categories + (this.dataset.name);
+        })
+        // clear div
+        let $div_1 = $("#step_5_you_give").empty()
+        //add list and items
+        let $ul_1 = $("<ul>")
+        $div_1.append($ul_1)
+        let $li_1 = $("<li>")
+        $ul_1.append($li_1)
+        $li_1.append($("<span>", { "class": "icon icon-bag" }))
+        $li_1.append($("<span>", { "class": "summary--text" })).html(this.bags + " worki " + categories);
+        let $li_2 = $("<li>")
+        $ul_1.append($li_2)
+        $li_2.append($("<span>", { "class": "icon icon-hand" }))
+        $li_2.append($("<span>", { "class": "summary--text" })).html('Dla fundacji "' + this.fundation + '"')
+        let $div_2 = $("#step_5_address").empty()
+        let $ul_2 = $("<ul>")
+        $div_2.append($ul_2)
+        $ul_2.append($("<li>").html(this.address))
+        $ul_2.append($("<li>").html(this.city))
+        $ul_2.append($("<li>").html(this.postcode))
+        $ul_2.append($("<li>").html(this.phone))
+        let $div_3 = $("#step_5_date_time").empty()
+        let $ul_3 = $("<ul>")
+        $div_3.append($ul_3)
+        $ul_3.append($("<li>").html(this.date))
+        $ul_3.append($("<li>").html(this.time))
+        $ul_3.append($("<li>").html(this.more_info))
+      }
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
-
       // TODO: get data from inputs and show them in summary
     }
 
