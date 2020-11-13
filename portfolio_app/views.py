@@ -95,6 +95,11 @@ class FormView(View):
             }
             return render(request, "form.html", ctx)
         return redirect("/login")
+    
+    def post(self, request):
+
+        return render(request, "form-confirmation.html")
+
 
 
 def get_institutions_by_categories(request):
@@ -112,10 +117,3 @@ def get_institutions_by_categories(request):
 class FormConfirmationView(View):
     def get(self, request):
         return render(request, "form-confirmation.html")
-    
-    def post(self, request):
-
-        ctx = {
-
-        }
-        return render(request, "form-confirmation.html", ctx)

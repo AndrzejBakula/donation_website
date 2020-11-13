@@ -184,14 +184,11 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$prev = form.querySelectorAll(".prev-step");
       this.$step = form.querySelector(".form--steps-counter span");
       this.currentStep = 1;
-
       this.$stepInstructions = form.querySelectorAll(".form--steps-instructions p");
       const $stepForms = form.querySelectorAll("form > div");
       this.slides = [...this.$stepInstructions, ...$stepForms];
-
       this.init();
     }
-
     /**
      * Init all methods
      */
@@ -205,10 +202,12 @@ document.addEventListener("DOMContentLoaded", function() {
      */
     events() {
       // Next step
+
       this.$next.forEach(btn => {
         btn.addEventListener("click", e => {
           e.preventDefault();
           this.currentStep++;
+          console.log(this.currentStep)
           this.updateForm();
         });
       });
@@ -226,93 +225,117 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$form.querySelector("form").addEventListener("submit", e => this.submit(e));
     }
 
+    getInputValue(name) {
+      var $div = $("form")
+      return $div.find('[name="' + name + '"]').val();
+    }
+
+    getInstitutions() {
+      this.$categories = $("input:checked")
+      var categories = new Array();
+      this.$categories.each(function () {
+        categories.push(this.dataset.category)
+      });
+      $("#step_3").html("")
+      var address = "/rest/get_institutions/";
+      var params = {};
+      params.categories = categories;
+      $.getJSON(address, $.param(params, true), function (data, status) {
+        console.log(data);
+        $.each(data, function (key, val) {
+          var $div = $("<div>", { "class": "form-group form-group--checkbox" });
+          var $label = $("<label>");
+          $div.append($label);
+          var $input = $("<input>", { "type": "radio", "name": "organization", "value": val.name });
+          $label.append($input);
+          $label.append($("<span>", { "class": "checkbox radio" }));
+          var $span = $("<span>", { "class": "description" });
+          $label.append($span);
+          $span.append($("<div>", { "class": "title" }).html(val.name));
+          $span.append($("<div>", { "class": "subtitle" }).html(val.description));
+          $span.append($(document.createElement("div")));
+          $("#step_3").append($div);
+        });
+      });
+      return categories;
+    }
+
     /**
      * Update form front-end
      * Show next or previous section etc.
      */
     updateForm() {
       this.$step.innerText = this.currentStep;
-      //let address;
+      var categories = new Array();
+      var address;
+      var city;
+      var postcode;
+      var phone;
+      var date;
+      var time;
+      var more_info;
+      var bags;
+      var fundation;
       // TODO: Validation
+
       this.slides.forEach(slide => {
         slide.classList.remove("active");
         if (slide.dataset.step == this.currentStep) {
           slide.classList.add("active");
         }
       });
+
       // after step 1 get all institutions based on selected ategories
-      if (this.currentStep === 2) {
-        let temp = new Array();
-        $("input:checked").each(function () {
-          temp.push(this.dataset.category)
-        });
-        this.categories = temp;
-      }
       if (this.currentStep === 3) {
-        $("#step_3").empty();
-        let address = "/rest/get_institutions/";
-        let params = {};
-        params.categories = this.categories;
-        $.getJSON(address, $.param(params, true), function (data, status) {
-          $.each(data, function (key, val) {
-            let $div = $("<div>", { "class": "form-group form-group--checkbox" });
-            let $label = $("<label>");
-            $div.append($label);
-            let $input = $("<input>", { "type": "radio", "name": "organization", "value": val.name });
-            $label.append($input);
-            $label.append($("<span>", { "class": "checkbox radio" }));
-            let $span = $("<span>", { "class": "description" });
-            $label.append($span);
-            $span.append($("<div>", { "class": "title" }).html(val.name));
-            $span.append($("<div>", { "class": "subtitle" }).html(val.description));
-            $span.append($(document.createElement("div")));
-            $("#step_3").append($div);
-          });
-        });
+        categories = this.getInstitutions();
       }
       if (this.currentStep === 5) {
-        this.address = this.getInputValue('address');
-        this.city = this.getInputValue('city');
-        this.postcode = this.getInputValue('postcode');
-        this.phone = this.getInputValue('phone');
-        this.date = this.getInputValue('date');
-        this.time = this.getInputValue('time');
-        this.more_info = this.getInputValue('more_info');
-        this.bags = this.getInputValue('bags');
-        this.fundation = $('input[name=organization]:checked', this.$form).val()
-        let categories = "";
-        $("input.categories:checked").each(function () {
-          categories = categories + (this.dataset.name);
-        })
+        address = this.getInputValue('address');
+        city = this.getInputValue('city');
+        postcode = this.getInputValue('postcode');
+        phone = this.getInputValue('phone');
+        date = this.getInputValue('date');
+        time = this.getInputValue('time');
+        more_info = this.getInputValue('more_info');
+        bags = this.getInputValue('bags');
+        fundation = $('input[name=organization]:checked', this.$form).val()
+        
         // clear div
-        let $div_1 = $("#step_5_you_give").empty()
+        var $div = $("#step_5_you_give").html("")
         //add list and items
-        let $ul_1 = $("<ul>")
-        $div_1.append($ul_1)
-        let $li_1 = $("<li>")
-        $ul_1.append($li_1)
-        $li_1.append($("<span>", { "class": "icon icon-bag" }))
-        $li_1.append($("<span>", { "class": "summary--text" })).html(this.bags + " worki " + categories);
-        let $li_2 = $("<li>")
-        $ul_1.append($li_2)
-        $li_2.append($("<span>", { "class": "icon icon-hand" }))
-        $li_2.append($("<span>", { "class": "summary--text" })).html('Dla fundacji "' + this.fundation + '"')
-        let $div_2 = $("#step_5_address").empty()
-        let $ul_2 = $("<ul>")
-        $div_2.append($ul_2)
-        $ul_2.append($("<li>").html(this.address))
-        $ul_2.append($("<li>").html(this.city))
-        $ul_2.append($("<li>").html(this.postcode))
-        $ul_2.append($("<li>").html(this.phone))
-        let $div_3 = $("#step_5_date_time").empty()
-        let $ul_3 = $("<ul>")
-        $div_3.append($ul_3)
-        $ul_3.append($("<li>").html(this.date))
-        $ul_3.append($("<li>").html(this.time))
-        $ul_3.append($("<li>").html(this.more_info))
+        var $ul = $("<ul>")
+        $div.append($ul)
+
+        var $li =$("<li>")
+        $ul.append($li)
+        $li.append($("<span>", {"class": "icon icon-bag"}))
+        $li.append($("<span>", {"class": "summary--text"})).html(bags + " worki " + categories.toString())
+
+
+        var $li =$("<li>")
+        $ul.append($li)
+        $li.append($("<span>", {"class": "icon icon-hand"}))
+        $li.append($("<span>", {"class": "summary--text"})).html('Dla fundacji "' + fundation +'"')
+
+        var $div = $("#step_5_address").html("")
+        var $ul = $("<ul>")
+        $div.append($ul)
+        $ul.append($("<li>").html(address))
+        $ul.append($("<li>").html(city))
+        $ul.append($("<li>").html(postcode))
+        $ul.append($("<li>").html(phone))
+
+        var $div = $("#step_5_date_time").html("")
+        var $ul = $("<ul>")
+        $div.append($ul)
+        $ul.append($("<li>").html(date))
+        $ul.append($("<li>").html(time))
+        $ul.append($("<li>").html(more_info))
       }
+
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
+
       // TODO: get data from inputs and show them in summary
     }
 
@@ -327,10 +350,10 @@ document.addEventListener("DOMContentLoaded", function() {
       this.updateForm();
     }
   }
+
+
   const form = document.querySelector(".form--steps");
   if (form !== null) {
     new FormSteps(form);
   }
-
-
 });
