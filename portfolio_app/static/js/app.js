@@ -285,7 +285,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       });
 
-      // after step 1 get all institutions based on selected ategories
+      // after step 1 get all institutions based on selected categories
       if (this.currentStep === 3) {
         categories = this.getInstitutions();
       }

@@ -97,8 +97,26 @@ class FormView(View):
         return redirect("/login")
     
     def post(self, request):
+        print(request.POST)
+        categories = request.POST.getlist("categories")
+        institution = request.POST.get("orgainzation")
+        user = request.session["user_id"]
+        quantity = request.POST["bags"]
+        address = request.POST["address"]
+        phone_number = request.POST["phone"]
+        city = request.POST["city"]
+        zip_code = request.POST["postcode"]
+        pick_up_date = request.POST["data"]
+        pick_up_time = request.POST["time"]
+        pick_up_comment = request.POST["more_info"]
 
-        return render(request, "form-confirmation.html")
+        donation = Donation.objects.create(quantity=quantity, institution=institution, address=address, phone_number=phone_number, city=city, zip_code=zip_code, pick_up_date=pick_up_date, pick_up_time=pick_up_time, pick_up_comment=pick_up_comment)
+        for i in categories:
+            donation.categories.add(i)
+        donation.user = user
+        donation.save()
+        
+        return redirect("/form-confirmation")
 
 
 
