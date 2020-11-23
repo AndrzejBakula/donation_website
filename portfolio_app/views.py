@@ -31,6 +31,7 @@ class LoginView(View):
         if user is not None:
             login(request, user)
             request.session["logged"] = True
+            request.session["user_id"] = user.pk
             return redirect("/")
         return redirect("/register")
         
@@ -99,8 +100,10 @@ class FormView(View):
     def post(self, request):
         print(request.POST)
         categories = request.POST.getlist("categories")
-        institution = request.POST.get("orgainzation")
-        user = request.session["user_id"]
+        institution = request.POST.get("organization")
+        institution = Institution.objects.get(pk=int(institution))
+        user_id = request.session["user_id"]
+        user = User.objects.get(id=user_id)
         quantity = request.POST["bags"]
         address = request.POST["address"]
         phone_number = request.POST["phone"]
@@ -111,12 +114,11 @@ class FormView(View):
         pick_up_comment = request.POST["more_info"]
 
         donation = Donation.objects.create(quantity=quantity, institution=institution, address=address, phone_number=phone_number, city=city, zip_code=zip_code, pick_up_date=pick_up_date, pick_up_time=pick_up_time, pick_up_comment=pick_up_comment)
-        for i in categories:
-            donation.categories.add(i)
+        donation.categories.add(*categories)
         donation.user = user
         donation.save()
         
-        return redirect("/form-confirmation")
+        return redirect("/form_confirmation")
 
 
 
