@@ -25,7 +25,7 @@ class LoginView(View):
         return render(request, "login.html")
     
     def post(self, request):
-        username = request.POST["email"]
+        username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(username=username, password=password)
         if user is not None:
