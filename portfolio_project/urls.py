@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from portfolio_app.views import LandingPageView, LoginView, LogoutView, RegisterView
 from portfolio_app.views import FormView, FormConfirmationView, get_institutions_by_categories
+from portfolio_app.views import UserView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +28,5 @@ urlpatterns = [
     path('form/', FormView.as_view(), name="form"),
     path('form_confirmation/', FormConfirmationView.as_view(), name="form-confirmation"),
     path('rest/get_institutions/',  get_institutions_by_categories),
+    path('user/', UserView.as_view(), name='user'),
 ]

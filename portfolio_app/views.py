@@ -137,3 +137,14 @@ def get_institutions_by_categories(request):
 class FormConfirmationView(View):
     def get(self, request):
         return render(request, "form-confirmation.html")
+
+
+class UserView(View):
+    def get(self, request):
+        user = request.session["user_id"]
+        user = User.objects.get(id=user)
+        
+        ctx = {
+            "user": user
+        }
+        return render(request, "user.html", ctx)

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block header %}
+
+  <header class="header--main-page">
+
+{% endblock %}
+
+
+{% block slogan %}
+
+    <div class="slogan container container--90">
+        <div class="slogan--item">
+            <h1>
+            Zacznij pomagać!<br />
+            Oddaj niechciane rzeczy w zaufane ręce
+            </h1>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section id="stats" class="stats">
+    <div >
+      <div class="stats--item">
+        <hr>
+        <h2>Details of user: <i>{{ user.username }}</i></h1>
+        <hr>
+        <p>Username: <b>{{ user.username }}</b></p>
+        <p>User first name: <b>{{ user.first_name }}</b></p>
+        <p>User last name: <b>{{ user.last_name }}</b></p>
+        <p>User email: <b>{{ user.email }}</b></p>
+        <hr>
+        <h1>Złożone dary:</h2>
+        {% for donation in user.donation_set.all %}
+        <h3>Dar o id {{ donation.id }}:</h3>
+        <p>Worków: <b>{{ donation.quantity }}</b></p>
+        <p>Instytucja: <b>{{ donation.institution.name }}</b></p>
+        <h3>Kategorie:</h3>
+        {% for category in donation.categories.all %}
+        <p>Kategorie: <b>{{ category.name }}</b></p>
+        {% endfor %}
+        <p>Data odbioru: <b>{{ donation.pick_up_date }}</b></p>
+        <p>Godzina odbioru: <b>{{ donation.pick_up_time }}</b></p>
+        <hr>
+        {% endfor %}
+
+      </div>      
+    </div>
+  </section>
+
+<script src="{% static 'js/app.js' %}"></script>
+
+{% endblock %}
