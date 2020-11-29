@@ -1,3 +1,6 @@
 from django.contrib import admin
+from portfolio_app.models import Institution
 
-# Register your models here.
+class InstitutionAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Institution, InstitutionAdmin)

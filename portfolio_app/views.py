@@ -143,8 +143,25 @@ class UserView(View):
     def get(self, request):
         user = request.session["user_id"]
         user = User.objects.get(id=user)
+        donations = Donation.objects.filter(user=user).order_by("is_taken").reverse()
         
         ctx = {
-            "user": user
+            "user": user,
+            "donations": donations
         }
         return render(request, "user.html", ctx)
+    
+    def post(self, request):
+        if request.POST.get("odebrany"):
+            id = int(request.POST.get("odebrany"))
+            donation = Donation.objects.get(id=id)
+            donation.is_taken = True
+            donation.save()
+            return redirect("/user#stats")
+        else:
+            id = int(request.POST.get("nieodebrany"))
+            donation = Donation.objects.get(id=id)
+            donation.is_taken = False
+            donation.save()
+            return redirect("/user#stats")
+

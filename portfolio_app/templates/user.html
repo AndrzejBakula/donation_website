@@ -37,7 +37,7 @@
         <p>User email: <b>{{ user.email }}</b></p>
         <hr>
         <h1>Złożone dary:</h2>
-        {% for donation in user.donation_set.all %}
+        {% for donation in donations %}
         <h3>Dar o id {{ donation.id }}:</h3>
         <p>Worków: <b>{{ donation.quantity }}</b></p>
         <p>Instytucja: <b>{{ donation.institution.name }}</b></p>
@@ -47,6 +47,20 @@
         {% endfor %}
         <p>Data odbioru: <b>{{ donation.pick_up_date }}</b></p>
         <p>Godzina odbioru: <b>{{ donation.pick_up_time }}</b></p>
+        {% if donation.is_taken %}
+        <p> Czy odbrany: <b>Odebrany</b></p>
+        <p><form method="POST" action="{% url 'user' %}">
+          {% csrf_token %}
+          <button type="submit" name="nieodebrany" value="{{ donation.id }}" class="btn">Nieodebrany</button>
+        </form></p>
+        {% else %}
+        <p>Czy odebrany: <b>Nieodebrany</b></p>
+        <p><form method="POST" action="{% url 'user' %}">
+          {% csrf_token %}
+          <button type="submit" name="odebrany" value="{{ donation.id }}" class="btn">Odebrany</button>
+        </form></p>
+         {% endif %}
+
         <hr>
         {% endfor %}
 
