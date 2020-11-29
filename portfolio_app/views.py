@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views import View
 from portfolio_app.models import Donation, Institution, Category
+from datetime import date
 
 
 class LandingPageView(View):
@@ -143,7 +144,7 @@ class UserView(View):
     def get(self, request):
         user = request.session["user_id"]
         user = User.objects.get(id=user)
-        donations = Donation.objects.filter(user=user).order_by("is_taken").reverse()
+        donations = Donation.objects.filter(user=user).order_by("is_taken").reverse().order_by("switch_date")
         
         ctx = {
             "user": user,
@@ -156,12 +157,14 @@ class UserView(View):
             id = int(request.POST.get("odebrany"))
             donation = Donation.objects.get(id=id)
             donation.is_taken = True
+            donation.switch_date = date.today()
             donation.save()
             return redirect("/user#stats")
         else:
             id = int(request.POST.get("nieodebrany"))
             donation = Donation.objects.get(id=id)
             donation.is_taken = False
+            donation.switch_date = date.today()
             donation.save()
             return redirect("/user#stats")
 
