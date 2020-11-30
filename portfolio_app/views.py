@@ -144,7 +144,7 @@ class UserView(View):
     def get(self, request):
         user = request.session["user_id"]
         user = User.objects.get(id=user)
-        donations = Donation.objects.filter(user=user).order_by("is_taken").reverse().order_by("switch_date")
+        donations = Donation.objects.filter(user=user).order_by("switch_date").order_by("is_taken")
         
         ctx = {
             "user": user,
