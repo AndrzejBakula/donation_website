@@ -1,4 +1,4 @@
-# portfolio_lab
+# donation website
 
 Project of donation web site, written using django, psql, java script, html and css. Static files developed by CodersLab. Java Script class "form steps" written by Przemek Szatkowski.
 
